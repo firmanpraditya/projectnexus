@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Progress Project Nexus 2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#d9d9d4;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif}
+
+.slide{width:1280px;height:720px;background:#f5f5f0;position:relative;overflow:hidden;border-radius:6px;box-shadow:0 8px 40px rgba(0,0,0,.18)}
+
+/* HEADER — compact 44px */
+.hdr{position:absolute;top:0;left:0;right:0;height:44px;background:#fff;border-bottom:1px solid #e0dfd8;display:flex;align-items:center;padding:0 28px;gap:12px;z-index:20}
+.hbadge{background:#1a56db;color:#fff;font-size:11px;font-weight:600;letter-spacing:.06em;padding:3px 10px;border-radius:4px}
+.htitle{font-size:15px;font-weight:600;color:#111}
+.hd{width:1px;height:16px;background:#e0dfd8}
+.hsub{font-size:12px;color:#6b7280}
+.hdate{font-size:12px;color:#9ca3af;margin-left:auto}
+
+/* FOOTER — compact 28px */
+.ftr{position:absolute;bottom:0;left:0;right:0;height:28px;background:#fff;border-top:1px solid #e0dfd8;display:flex;align-items:center;padding:0 28px;z-index:20}
+.ft{font-size:10px;color:#9ca3af;letter-spacing:.04em}
+.fr{margin-left:auto}
+
+/* canvas: 720 - 44 - 28 = 648px */
+.canvas{position:absolute;top:44px;left:0;right:0;bottom:28px}
+
+/* SVG layer */
+.svgl{position:absolute;inset:0;width:1280px;height:648px;pointer-events:none;z-index:2}
+
+/* NODE CARDS */
+.node{position:absolute;width:192px;background:#fff;border:1px solid #e0dfd8;border-radius:8px;cursor:pointer;z-index:6;overflow:hidden;transition:box-shadow .18s,border-color .18s}
+.node:hover{box-shadow:0 4px 14px rgba(0,0,0,.1);border-color:#c5c4bc}
+.nhdr{display:flex;align-items:flex-start;gap:9px;padding:11px 13px 8px}
+.nicon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;margin-top:1px}
+.ntop{}
+.nlabel{font-size:9.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
+.ntitle{font-size:13px;font-weight:600;color:#111;line-height:1.25}
+.ndesc{font-size:11.5px;color:#6b7280;line-height:1.5;padding:0 13px 11px}
+.ndet{max-height:0;overflow:hidden;transition:max-height .38s cubic-bezier(.4,0,.2,1),opacity .28s;opacity:0}
+.node.open .ndet{max-height:200px;opacity:1}
+.ndbody{margin:0 9px 9px;background:#f8f8f4;border-radius:6px;padding:9px 10px}
+.dh{font-size:9.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#9ca3af;margin-bottom:6px}
+.dr{display:flex;align-items:flex-start;gap:6px;font-size:11px;color:#374151;line-height:1.5;margin-bottom:3px}
+.dr::before{content:'–';color:#9ca3af;flex-shrink:0}
+.badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 9px;border-radius:10px;margin-top:6px}
+
+/* CENTER NODE */
+.cn{position:absolute;width:164px;height:164px;border-radius:50%;background:#fff;border:2px solid #1a56db;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px;z-index:7;box-shadow:0 2px 14px rgba(26,86,219,.12)}
+.cico{font-size:21px;margin-bottom:3px}
+.ctit{font-size:11.5px;font-weight:700;color:#1a56db;letter-spacing:.05em;text-transform:uppercase;line-height:1.2}
+.csub{font-size:9px;color:#6b7280;margin-top:3px;line-height:1.45}
+.ctags{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;margin-top:5px}
+.ctag{font-size:8.5px;padding:1px 5px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;color:#1d4ed8}
+
+/* DISCUSSION BOX */
+.discbox{position:absolute;background:#fff;border:1px solid #e0dfd8;border-radius:8px;padding:12px 15px;z-index:8;width:330px}
+.disc-hdr{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6b7280;border-bottom:1px solid #f0efe8;padding-bottom:6px;margin-bottom:8px}
+.disc-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;font-size:12px;color:#374151;line-height:1.45}
+.disc-row:last-child{margin-bottom:0}
+.disc-num{width:18px;height:18px;border-radius:50%;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#374151;flex-shrink:0;margin-top:1px}
+
+/* color */
+.ic-teal{background:#f0fdfa;color:#0f766e}  .lb-teal{color:#0f766e}  .sb-teal{background:#f0fdfa;color:#0f766e}
+.ic-violet{background:#f5f3ff;color:#7c3aed}.lb-violet{color:#7c3aed}.sb-violet{background:#f5f3ff;color:#7c3aed}
+.ic-amber{background:#fffbeb;color:#b45309} .lb-amber{color:#b45309} .sb-amber{background:#fffbeb;color:#b45309}
+.ic-rose{background:#fff1f2;color:#be123c}  .lb-rose{color:#be123c}  .sb-rose{background:#fff1f2;color:#be123c}
+.ic-grn{background:#ecfdf5;color:#065f46}   .lb-grn{color:#065f46}   .sb-grn{background:#ecfdf5;color:#065f46}
+
+
+/* POPUP DETAIL — replaces inline expand so cards never overlap */
+.node .ndet{display:none!important;max-height:0!important;opacity:0!important}
+.popov{position:absolute;inset:0;background:rgba(17,24,39,.22);backdrop-filter:blur(2px);z-index:50;display:flex;align-items:center;justify-content:center;padding:58px 36px 44px;opacity:0;pointer-events:none;transition:opacity .22s ease}
+.popov.show{opacity:1;pointer-events:auto}
+.popcard{width:620px;max-width:calc(100% - 72px);background:#fff;border:1px solid #d9d8d0;border-radius:14px;box-shadow:0 22px 70px rgba(0,0,0,.22);overflow:hidden;transform:translateY(14px) scale(.98);transition:transform .24s cubic-bezier(.2,.8,.2,1)}
+.popov.show .popcard{transform:translateY(0) scale(1)}
+.poph{display:flex;align-items:center;gap:13px;padding:18px 22px 14px;border-bottom:1px solid #ecebe4;background:linear-gradient(180deg,#fff,#fbfbf7)}
+.popico{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.popmeta{min-width:0}.poplabel{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}.poptitle{font-size:22px;font-weight:800;color:#111;line-height:1.2}
+.popclose{margin-left:auto;width:34px;height:34px;border:0;border-radius:50%;background:#f3f4f6;color:#6b7280;font-size:22px;line-height:1;cursor:pointer}.popclose:hover{background:#e5e7eb;color:#111}
+.popbody{padding:18px 22px 20px}.popdesc{font-size:15px;color:#4b5563;line-height:1.6;margin-bottom:14px}.popbody .ndbody{margin:0;background:#f8f8f4;border-radius:10px;padding:14px 16px}.popbody .dh{font-size:12px;margin-bottom:10px}.popbody .dr{font-size:15px;line-height:1.55;margin-bottom:7px}.popbody .badge{font-size:13px;padding:5px 13px;border-radius:16px;margin-top:10px}
+
+</style>
+</head>
+<body>
+<div class="slide" id="slide">
+
+  <div class="hdr">
+    <div class="hbadge">NEXUS 2026</div>
+    <div class="htitle">Progress Project Nexus 2026</div>
+    <div class="hd"></div>
+    <div class="hsub">IT Department &middot; Laporan Internal</div>
+    <div class="hdate" id="ds"></div>
+  </div>
+
+  <div class="canvas" id="canvas">
+    <!-- SVG connectors -->
+    <svg class="svgl" id="csvg" viewBox="0 0 1280 648" preserveAspectRatio="none">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+          <path d="M1,1.5 L7,4 L1,6.5" fill="none" stroke="#b0b0aa" stroke-width="1.2"/>
+        </marker>
+      </defs>
+    </svg>
+
+    <!--
+      Canvas: 1280 x 648
+      Center circle: cx=640, cy=310  r=82
+
+      Star positions (node top-left corners), node size 192x~110 (collapsed):
+        N1 (left-top):    left=50,   top=52
+        N2 (left-bot):    left=50,   top=370
+        N3 (top-center):  left=544,  top=14
+        N4 (right-top):   left=1038, top=52
+        N5 (right-bot):   left=1038, top=370
+
+      Discussion box:   left=475,  bottom area ~top=505
+    -->
+
+    <!-- N1: Plant Vision 360 — LEFT TOP -->
+    <div class="node" id="n1" style="left:50px;top:52px" onclick="openPop('n1')">
+      <div class="nhdr">
+        <div class="nicon ic-teal">🏭</div>
+        <div class="ntop">
+          <div class="nlabel lb-teal">Module 1</div>
+          <div class="ntitle">Plant Vision 360</div>
+        </div>
+      </div>
+      <div class="ndesc">Data akuisisi infrastruktur pabrik: reaktor (suhu &amp; berat), sensor produksi, meter listrik.</div>
+      <div class="ndet"><div class="ndbody">
+        <div class="dh">Progress</div>
+        <div class="dr">Monitoring reaktor PVAC aktif berjalan</div>
+        <div class="dr">Pengembangan lanjut: reaktor Neoprene</div>
+        <div class="dr">Berikutnya: integrasi panel meter listrik</div>
+        <span class="badge sb-teal">In Progress</span>
+      </div></div>
+    </div>
+
+    <!-- N2: WMS & App Driver — LEFT BOTTOM -->
+    <div class="node" id="n2" style="left:50px;top:370px" onclick="openPop('n2')">
+      <div class="nhdr">
+        <div class="nicon ic-violet">📦</div>
+        <div class="ntop">
+          <div class="nlabel lb-violet">Module 2</div>
+          <div class="ntitle">WMS &amp; App Driver</div>
+        </div>
+      </div>
+      <div class="ndesc">Pencatatan produksi, aktivitas gudang, dan finalisasi pengiriman ke customer.</div>
+      <div class="ndet"><div class="ndbody">
+        <div class="dh">Progress &amp; Kebutuhan</div>
+        <div class="dr">UAT aktivitas Gudang &amp; Apps Driver</div>
+        <div class="dr">Go Live Surabaya: 03 Agustus 2026</div>
+        <div class="dr">8 barcode scanner industrial (produksi)</div>
+        <div class="dr">5 HP scan gudang &middot; 18 HP driver</div>
+        <span class="badge sb-violet">UAT Phase</span>
+      </div></div>
+    </div>
+
+    <!-- N3: Order Management — TOP CENTER -->
+    <div class="node" id="n3" style="left:544px;top:14px" onclick="openPop('n3')">
+      <div class="nhdr">
+        <div class="nicon ic-amber">🗂️</div>
+        <div class="ntop">
+          <div class="nlabel lb-amber">Module 3</div>
+          <div class="ntitle">Order Management</div>
+        </div>
+      </div>
+      <div class="ndesc">Pengaturan order cabang ke Plant — supply chain &amp; OTIF terjaga.</div>
+      <div class="ndet"><div class="ndbody">
+        <div class="dh">Status</div>
+        <div class="dr">Sudah live di semua cabang</div>
+        <div class="dr">Sebagian cabang belum aktif gunakan OM</div>
+        <div class="dr">Mengatasi bias input AX langsung</div>
+        <span class="badge sb-amber">Live – Partial Active</span>
+      </div></div>
+    </div>
+
+    <!-- N4: Customer Portal — RIGHT TOP -->
+    <div class="node" id="n4" style="left:1038px;top:52px" onclick="openPop('n4')">
+      <div class="nhdr">
+        <div class="nicon ic-rose">🌐</div>
+        <div class="ntop">
+          <div class="nlabel lb-rose">Module 4</div>
+          <div class="ntitle">Customer Portal</div>
+        </div>
+      </div>
+      <div class="ndesc">Platform monitoring pengiriman, piutang, pembayaran &amp; ticketing komplain.</div>
+      <div class="ndet"><div class="ndbody">
+        <div class="dh">Progress &amp; Target</div>
+        <div class="dr">Perbaikan tampilan &amp; modul payment</div>
+        <div class="dr">Target: Minggu 2 Juli 2026</div>
+        <div class="dr">Mulai 10 sampling customer industri</div>
+        <span class="badge sb-rose">In Development</span>
+      </div></div>
+    </div>
+
+    <!-- N5: CMMS — RIGHT BOTTOM -->
+    <div class="node" id="n5" style="left:1038px;top:370px" onclick="openPop('n5')">
+      <div class="nhdr">
+        <div class="nicon ic-grn">🔧</div>
+        <div class="ntop">
+          <div class="nlabel lb-grn">Module 5</div>
+          <div class="ntitle">CMMS</div>
+        </div>
+      </div>
+      <div class="ndesc">Maintenance management: tiket perbaikan, preventive maintenance, project &amp; sparepart.</div>
+      <div class="ndet"><div class="ndbody">
+        <div class="dh">Status</div>
+        <div class="dr">Diskusi awal: Pak Tomi &amp; Pak Usman</div>
+        <div class="dr">Penyusunan scope of work &amp; blueprint</div>
+        <div class="dr">Cakupan: tiket, preventive, sparepart</div>
+        <span class="badge sb-grn">Early Discussion</span>
+      </div></div>
+    </div>
+
+    <!-- CENTER NODE -->
+    <div class="cn" id="cn" style="left:558px;top:228px">
+      <div class="cico">📊</div>
+      <div class="ctit">Dashboard<br>Nexus</div>
+      <div class="csub">Analisa &amp; laporan seluruh aktivitas bisnis</div>
+      <div class="ctags">
+        <span class="ctag">Sales</span><span class="ctag">Plant</span><span class="ctag">Finance</span>
+        <span class="ctag">Product</span><span class="ctag">Customer</span>
+      </div>
+    </div>
+
+    <!-- DISCUSSION BOX — bottom center -->
+    <div class="discbox" id="discbox" style="left:475px;top:502px">
+      <div class="disc-hdr">Topik Diskusi Tambahan</div>
+      <div class="disc-row"><div class="disc-num">1</div><div>Rencana kelanjutan server AX di AWS</div></div>
+      <div class="disc-row"><div class="disc-num">2</div><div>Progress Pricing Management</div></div>
+      <div class="disc-row"><div class="disc-num">3</div><div>Simulation tools Siemens untuk mendukung R&amp;D Activity</div></div>
+      <div class="disc-row"><div class="disc-num">4</div><div>Progress platform mendukung tim Sobat &amp; Bunny</div></div>
+    </div>
+
+
+
+    <!-- POPUP DETAIL MODUL -->
+    <div class="popov" id="popov" onclick="overlayClose(event)">
+      <div class="popcard" role="dialog" aria-modal="true" aria-labelledby="poptitle">
+        <div class="poph">
+          <div class="popico" id="popico"></div>
+          <div class="popmeta">
+            <div class="poplabel" id="poplabel"></div>
+            <div class="poptitle" id="poptitle"></div>
+          </div>
+          <button class="popclose" onclick="closePop()" aria-label="Tutup">×</button>
+        </div>
+        <div class="popbody">
+          <div class="popdesc" id="popdesc"></div>
+          <div id="popdetail"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- canvas -->
+
+  <div class="ftr">
+    <div class="ft">IT DEPARTMENT &nbsp;·&nbsp; CONFIDENTIAL &nbsp;·&nbsp; INTERNAL USE ONLY</div>
+    <div class="fr"><div class="ft">PROJECT NEXUS 2026</div></div>
+  </div>
+</div>
+
+<script>
+document.getElementById('ds').textContent = new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
+
+// After render, verify discussion box doesn't overflow and draw lines
+window.addEventListener('load', () => {
+  fitDiscBox();
+  drawLines();
+});
+
+function fitDiscBox(){
+  const db = document.getElementById('discbox');
+  const canvas = document.getElementById('canvas');
+  const canvasH = canvas.offsetHeight; // 648
+  const dbH = db.offsetHeight;
+  const dbTop = canvasH - dbH - 12;
+  db.style.top = dbTop + 'px';
+  // center horizontally: (1280 - 330) / 2 = 475
+  db.style.left = ((1280 - 330) / 2) + 'px';
+}
+
+let cur = null;
+function openPop(id){
+  const node = document.getElementById(id);
+  const pop  = document.getElementById('popov');
+  const icon = node.querySelector('.nicon');
+  const label = node.querySelector('.nlabel');
+  const title = node.querySelector('.ntitle');
+  const desc = node.querySelector('.ndesc');
+  const detail = node.querySelector('.ndbody');
+
+  const popico = document.getElementById('popico');
+  popico.className = 'popico ' + [...icon.classList].filter(c => c.startsWith('ic-')).join(' ');
+  popico.textContent = icon.textContent;
+
+  const poplabel = document.getElementById('poplabel');
+  poplabel.className = 'poplabel ' + [...label.classList].filter(c => c.startsWith('lb-')).join(' ');
+  poplabel.textContent = label.textContent;
+
+  document.getElementById('poptitle').textContent = title.textContent;
+  document.getElementById('popdesc').textContent = desc.textContent;
+  document.getElementById('popdetail').innerHTML = detail ? detail.outerHTML : '';
+
+  pop.classList.add('show');
+}
+function closePop(){ document.getElementById('popov').classList.remove('show'); }
+function overlayClose(e){ if(e.target.id === 'popov') closePop(); }
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closePop(); });
+
+/*
+  Node attach points (right edge center, left edge center, bottom edge center):
+  All coordinates are relative to .canvas div.
+  Center circle: cx=640, cy=310 (cx = 558+82, cy = 228+82)
+*/
+const R = 82;
+const CX = 558 + R; // 640
+const CY = 228 + R; // 310
+
+const attachSide = {
+  n1: 'right',
+  n2: 'right',
+  n3: 'bottom',
+  n4: 'left',
+  n5: 'left',
+};
+
+function nodeAttach(id, side){
+  const el = document.getElementById(id);
+  const canvas = document.getElementById('canvas');
+  const cr = canvas.getBoundingClientRect();
+  const nr = el.getBoundingClientRect();
+  const x0 = nr.left - cr.left;
+  const y0 = nr.top  - cr.top;
+  const w  = nr.width, h = nr.height;
+  if(side === 'right')  return [x0 + w,   y0 + h/2];
+  if(side === 'left')   return [x0,        y0 + h/2];
+  if(side === 'bottom') return [x0 + w/2,  y0 + h];
+  return [x0 + w/2, y0];
+}
+
+function drawLines(){
+  const svg = document.getElementById('csvg');
+  svg.querySelectorAll('.cl').forEach(e => e.remove());
+
+  Object.entries(attachSide).forEach(([id, side]) => {
+    const [nx, ny] = nodeAttach(id, side);
+    const dx = CX - nx, dy = CY - ny;
+    const d  = Math.sqrt(dx*dx + dy*dy);
+    const tx = CX - (dx/d)*R;
+    const ty = CY - (dy/d)*R;
+
+    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('class','cl');
+    line.setAttribute('x1', nx.toFixed(1));
+    line.setAttribute('y1', ny.toFixed(1));
+    line.setAttribute('x2', tx.toFixed(1));
+    line.setAttribute('y2', ty.toFixed(1));
+    line.setAttribute('stroke','#b0b0aa');
+    line.setAttribute('stroke-width','1.2');
+    line.setAttribute('marker-end','url(#arr)');
+    svg.appendChild(line);
+  });
+}
+</script>
+</body>
+</html>
