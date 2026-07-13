@@ -4,259 +4,200 @@
 <meta charset="UTF-8">
 <title>Progress Project Nexus 2026</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{width:100%;height:100%;background:#d4d4cf;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif}
-.slide{width:1280px;height:720px;background:#f5f5f0;position:relative;overflow:hidden;border-radius:6px;box-shadow:0 8px 40px rgba(0,0,0,.18)}
+html,body{width:100%;height:100%;background:#dedcd4;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif}
 
-/* HEADER */
-.hdr{position:absolute;top:0;left:0;right:0;height:46px;background:#fff;border-bottom:1px solid #e0dfd8;display:flex;align-items:center;padding:0 28px;gap:12px;z-index:20}
-.hbadge{background:#1a56db;color:#fff;font-size:11px;font-weight:600;letter-spacing:.06em;padding:3px 10px;border-radius:4px}
-.htitle{font-size:15px;font-weight:600;color:#111}
-.hd{width:1px;height:16px;background:#e0dfd8}
-.hsub{font-size:12px;color:#6b7280}
-.hdate{font-size:12px;color:#9ca3af;margin-left:auto}
-
-/* FOOTER */
-.ftr{position:absolute;bottom:0;left:0;right:0;height:26px;background:#fff;border-top:1px solid #e0dfd8;display:flex;align-items:center;padding:0 28px;z-index:20}
-.ft{font-size:10px;color:#9ca3af;letter-spacing:.04em}
-.fr{margin-left:auto}
-
-/* canvas: 720 - 46 - 26 = 648px */
-.canvas{position:absolute;top:46px;left:0;right:0;bottom:26px}
-.svgl{position:absolute;inset:0;width:1280px;height:648px;pointer-events:none;z-index:2}
-
-/* ── NODE CARDS ── */
-.node{
-  position:absolute;width:186px;
-  background:#fff;border:1px solid #e0dfd8;border-radius:8px;
-  cursor:pointer;z-index:6;
-  transition:box-shadow .18s,border-color .18s;
+:root{
+  --navy:#101b30;
+  --navy2:#1a2b4a;
+  --paper:#fbfaf8;
+  --ink:#181c22;
+  --slate:#6b7280;
+  --slate-lt:#9aa0ab;
+  --brass:#b8874f;
+  --brass-lt:#d9b076;
+  --hair:#e6e4dc;
+  --live:#2f6f4f; --live-bg:#eef6f1;
+  --prog:#a9762f; --prog-bg:#fbf2e5;
+  --dev:#3b6ea5;  --dev-bg:#eaf1f8;
+  --disc:#7d7669; --disc-bg:#f2f0eb;
 }
-.node:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);border-color:#c5c4bc}
-.nhdr{display:flex;align-items:flex-start;gap:9px;padding:11px 12px 8px}
-.nicon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;margin-top:1px}
-.nlabel{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
-.ntitle{font-size:12.5px;font-weight:600;color:#111;line-height:1.25}
-.ndesc{font-size:11px;color:#6b7280;line-height:1.5;padding:0 12px 11px}
 
-/* ── CENTER NODE ── */
-.cn{
-  position:absolute;width:152px;height:152px;border-radius:50%;
-  background:#fff;border:2px solid #1a56db;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;padding:10px;z-index:7;
-  box-shadow:0 2px 16px rgba(26,86,219,.14);
-  pointer-events:none;
+.slide{width:1280px;height:720px;background:var(--paper);position:relative;overflow:hidden;border-radius:6px;box-shadow:0 8px 44px rgba(0,0,0,.22);display:flex}
+
+/* ============ SIDEBAR ============ */
+.side{
+  width:352px;flex-shrink:0;height:100%;position:relative;
+  background:linear-gradient(165deg,var(--navy) 0%,var(--navy2) 100%);
+  color:#fff;padding:34px 30px 26px;display:flex;flex-direction:column;
+  overflow:hidden;
 }
-.cico{font-size:20px;margin-bottom:3px}
-.ctit{font-size:12px;font-weight:700;color:#1a56db;letter-spacing:.04em;text-transform:uppercase;line-height:1.2}
-.csub{font-size:8.5px;color:#9ca3af;margin-top:3px;line-height:1.4}
+.blueprint{position:absolute;inset:0;opacity:.5;pointer-events:none}
+.side::after{content:'';position:absolute;right:0;top:0;bottom:0;width:1px;background:rgba(255,255,255,.08)}
 
-/* ── POPUP ── */
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.16em;color:var(--brass-lt);font-weight:500;position:relative;z-index:2}
+.side-title{font-family:'Space Grotesk',sans-serif;font-size:29px;font-weight:700;line-height:1.15;margin-top:10px;letter-spacing:-.01em;position:relative;z-index:2}
+.side-sub{font-size:12px;color:rgba(255,255,255,.55);margin-top:10px;line-height:1.6;max-width:270px;position:relative;z-index:2}
+
+.ring-wrap{margin-top:32px;display:flex;align-items:center;gap:18px;position:relative;z-index:2}
+.ring{
+  width:104px;height:104px;border-radius:50%;flex-shrink:0;position:relative;
+  background:conic-gradient(var(--live) 0% 37.5%, var(--prog) 37.5% 62.5%, var(--dev) 62.5% 87.5%, var(--disc) 87.5% 100%);
+}
+.ring::before{content:'';position:absolute;inset:11px;border-radius:50%;background:var(--navy2);box-shadow:inset 0 1px 3px rgba(0,0,0,.3)}
+.ring-num{position:absolute;inset:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif}
+.ring-num b{font-size:26px;font-weight:700;line-height:1}
+.ring-num span{font-size:8px;letter-spacing:.08em;color:rgba(255,255,255,.5);margin-top:2px;text-transform:uppercase}
+
+.legend{display:flex;flex-direction:column;gap:7px}
+.lg-row{display:flex;align-items:center;gap:8px;font-size:11px;color:rgba(255,255,255,.75)}
+.lg-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.lg-n{margin-left:auto;font-family:'JetBrains Mono',monospace;color:rgba(255,255,255,.4);font-size:10.5px}
+
+.side-div{height:1px;background:rgba(255,255,255,.1);margin:26px 0 20px;position:relative;z-index:2}
+
+.side-note-h{font-size:10px;letter-spacing:.1em;color:rgba(255,255,255,.4);text-transform:uppercase;font-weight:600;position:relative;z-index:2}
+.side-note{font-size:11.5px;color:rgba(255,255,255,.68);line-height:1.65;margin-top:9px;position:relative;z-index:2}
+
+.side-foot{margin-top:auto;position:relative;z-index:2}
+.side-foot-r{display:flex;align-items:baseline;gap:6px;font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,.35);letter-spacing:.05em}
+
+/* ============ MAIN ============ */
+.main{flex:1;height:100%;display:flex;flex-direction:column;position:relative}
+.mhdr{
+  height:78px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
+  padding:0 34px;border-bottom:1px solid var(--hair);
+}
+.mhdr-l{display:flex;flex-direction:column;gap:3px}
+.mhdr-l .t1{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;color:var(--ink)}
+.mhdr-l .t2{font-size:11px;color:var(--slate-lt)}
+.mhdr-r{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--slate-lt);text-align:right}
+
+/* ROW LIST */
+.rows{flex:1;overflow:hidden;padding:6px 34px 0}
+.row{
+  display:flex;align-items:center;gap:18px;height:65.75px;border-bottom:1px solid var(--hair);
+  cursor:pointer;position:relative;transition:background .15s;
+}
+.row:last-child{border-bottom:none}
+.row:hover{background:#f5f4ef}
+.row:hover .row-arrow{transform:translateX(3px);opacity:1}
+.row-id{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--brass);font-weight:600;width:38px;flex-shrink:0;letter-spacing:.02em}
+.row-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.row-txt{min-width:0;flex:1}
+.row-txt .rt1{font-size:14px;font-weight:600;color:var(--ink);line-height:1.3}
+.row-txt .rt2{font-size:11.5px;color:var(--slate);margin-top:2px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pill{font-size:10.5px;font-weight:600;padding:4px 11px;border-radius:11px;flex-shrink:0;white-space:nowrap}
+.row-arrow{color:var(--slate-lt);font-size:15px;flex-shrink:0;opacity:.5;transition:.15s}
+
+.ic-live{background:var(--live-bg);color:var(--live)}
+.ic-prog{background:var(--prog-bg);color:var(--prog)}
+.ic-dev{background:var(--dev-bg);color:var(--dev)}
+.ic-disc{background:var(--disc-bg);color:var(--disc)}
+.pl-live{background:var(--live-bg);color:var(--live)}
+.pl-prog{background:var(--prog-bg);color:var(--prog)}
+.pl-dev{background:var(--dev-bg);color:var(--dev)}
+.pl-disc{background:var(--disc-bg);color:var(--disc)}
+
+.mftr{
+  height:30px;flex-shrink:0;border-top:1px solid var(--hair);display:flex;align-items:center;
+  padding:0 34px;font-size:9.5px;letter-spacing:.05em;color:var(--slate-lt);
+}
+.mftr .fr{margin-left:auto}
+
+/* ============ POPUP ============ */
 .popov{
-  position:absolute;inset:0;
-  background:rgba(17,24,39,.22);backdrop-filter:blur(2px);
-  z-index:50;display:flex;align-items:center;justify-content:center;
-  padding:52px 32px 36px;
-  opacity:0;pointer-events:none;transition:opacity .22s ease;
+  position:absolute;inset:0;background:rgba(16,27,48,.42);backdrop-filter:blur(2px);
+  z-index:50;display:flex;align-items:center;justify-content:center;padding:40px;
+  opacity:0;pointer-events:none;transition:opacity .2s ease;
 }
 .popov.show{opacity:1;pointer-events:auto}
 .popcard{
-  width:640px;max-width:calc(100% - 64px);
-  background:#fff;border:1px solid #d9d8d0;border-radius:14px;
-  box-shadow:0 22px 70px rgba(0,0,0,.22);overflow:hidden;
-  transform:translateY(12px) scale(.98);
-  transition:transform .24s cubic-bezier(.2,.8,.2,1);
+  width:620px;max-width:100%;background:var(--paper);border-radius:12px;overflow:hidden;
+  box-shadow:0 24px 70px rgba(0,0,0,.35);transform:translateY(10px) scale(.98);
+  transition:transform .22s cubic-bezier(.2,.8,.2,1);
 }
 .popov.show .popcard{transform:translateY(0) scale(1)}
 .poph{
-  display:flex;align-items:center;gap:13px;
-  padding:18px 22px 14px;border-bottom:1px solid #ecebe4;
-  background:linear-gradient(180deg,#fff,#fbfbf7);
+  background:linear-gradient(165deg,var(--navy) 0%,var(--navy2) 100%);color:#fff;
+  padding:22px 26px;display:flex;align-items:center;gap:14px;position:relative;
 }
-.popico{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.popico{width:42px;height:42px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:rgba(255,255,255,.1)}
 .popmeta{min-width:0}
-.poplabel{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
-.poptitle{font-size:21px;font-weight:700;color:#111;line-height:1.2}
-.popclose{margin-left:auto;width:34px;height:34px;border:0;border-radius:50%;background:#f3f4f6;color:#6b7280;font-size:22px;line-height:1;cursor:pointer}
-.popclose:hover{background:#e5e7eb;color:#111}
-.popbody{padding:16px 22px 20px}
-.popdesc{font-size:14px;color:#4b5563;line-height:1.65;margin-bottom:14px}
-.popdetail-box{background:#f8f8f4;border-radius:10px;padding:13px 16px}
-.pdh{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9ca3af;margin-bottom:9px}
-.pdr{display:flex;align-items:flex-start;gap:7px;font-size:14px;color:#374151;line-height:1.55;margin-bottom:6px}
-.pdr::before{content:'–';color:#9ca3af;flex-shrink:0}
+.poplabel{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:var(--brass-lt);font-weight:500}
+.poptitle{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;margin-top:3px}
+.popclose{margin-left:auto;width:30px;height:30px;border:0;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;font-size:18px;cursor:pointer;flex-shrink:0}
+.popclose:hover{background:rgba(255,255,255,.2)}
+.popbody{padding:22px 26px 24px}
+.popdesc{font-size:13.5px;color:var(--ink);line-height:1.65;margin-bottom:16px}
+.popdetail-box{background:#f5f4ee;border-radius:10px;padding:15px 18px}
+.pdh{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--slate-lt);margin-bottom:10px}
+.pdr{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#374151;line-height:1.55;margin-bottom:7px}
+.pdr::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--brass);margin-top:6px;flex-shrink:0}
 .pdr:last-child{margin-bottom:0}
-.pbadge{display:inline-block;font-size:12px;font-weight:600;padding:4px 12px;border-radius:12px;margin-top:10px}
-.pbadge2{display:inline-block;font-size:12px;font-weight:600;padding:4px 12px;border-radius:12px;margin-top:6px;margin-left:6px}
-.pnote{font-size:12px;color:#6b7280;font-style:italic;margin-top:10px;line-height:1.5;border-top:1px solid #ece9e0;padding-top:9px}
+.pbadge{display:inline-block;font-size:11.5px;font-weight:600;padding:4px 12px;border-radius:12px;margin-top:12px}
+.pnote{font-size:11.5px;color:var(--slate);font-style:italic;margin-top:12px;line-height:1.55;border-top:1px solid var(--hair);padding-top:10px}
 
-/* colors */
-.ic-teal{background:#f0fdfa;color:#0f766e}    .lb-teal{color:#0f766e}    .sb-teal{background:#f0fdfa;color:#0f766e}
-.ic-violet{background:#f5f3ff;color:#7c3aed}  .lb-violet{color:#7c3aed}  .sb-violet{background:#f5f3ff;color:#7c3aed}
-.ic-amber{background:#fffbeb;color:#b45309}   .lb-amber{color:#b45309}   .sb-amber{background:#fffbeb;color:#b45309}
-.ic-rose{background:#fff1f2;color:#be123c}    .lb-rose{color:#be123c}    .sb-rose{background:#fff1f2;color:#be123c}
-.ic-grn{background:#ecfdf5;color:#065f46}     .lb-grn{color:#065f46}     .sb-grn{background:#ecfdf5;color:#065f46}
-.ic-blue{background:#eff6ff;color:#1d4ed8}    .lb-blue{color:#1d4ed8}    .sb-blue{background:#eff6ff;color:#1d4ed8}
-.ic-sky{background:#f0f9ff;color:#0369a1}     .lb-sky{color:#0369a1}     .sb-sky{background:#f0f9ff;color:#0369a1}
-.ic-orange{background:#fff7ed;color:#c2410c}  .lb-orange{color:#c2410c}  .sb-orange{background:#fff7ed;color:#c2410c}
+::selection{background:var(--brass-lt);color:#111}
 </style>
 </head>
 <body>
-<div class="slide" id="slide">
+<div class="slide">
 
-  <div class="hdr">
-    <div class="hbadge">NEXUS 2026</div>
-    <div class="htitle">Progress Project Nexus 2026</div>
-    <div class="hd"></div>
-    <div class="hsub">IT Department &middot; Laporan Internal</div>
-    <div class="hdate" id="ds"></div>
-  </div>
-
-  <div class="canvas" id="canvas">
-    <svg class="svgl" id="csvg" viewBox="0 0 1280 648" preserveAspectRatio="none">
+  <!-- ============ SIDEBAR ============ -->
+  <div class="side">
+    <svg class="blueprint" viewBox="0 0 352 720" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-          <path d="M1,1.5 L7,4 L1,6.5" fill="none" stroke="#b8b8b2" stroke-width="1.2"/>
-        </marker>
+        <pattern id="grid" width="26" height="26" patternUnits="userSpaceOnUse">
+          <path d="M26 0H0V26" fill="none" stroke="rgba(255,255,255,0.045)" stroke-width="1"/>
+        </pattern>
       </defs>
+      <rect width="352" height="720" fill="url(#grid)"/>
+      <circle cx="352" cy="720" r="230" fill="none" stroke="rgba(184,135,79,0.08)" stroke-width="1"/>
+      <circle cx="352" cy="720" r="150" fill="none" stroke="rgba(184,135,79,0.08)" stroke-width="1"/>
     </svg>
 
-    <!--
-      8 nodes in star layout around center (cx=640, cy=324)
-      Arranged clockwise from top:
-        N_portal   → TOP CENTER        left=527,  top=16
-        N4 portal  → TOP RIGHT         left=842,  top=72
-        N_cmms     → RIGHT             left=1068, top=212
-        N5 cmms    ...
-      
-      Layout plan (2 left, 2 right, 2 top, 1 bottom — but 8 nodes):
-      Best for 8: clock positions at ~45° each
-        12:00 → top-center
-        ~1:30 → top-right
-        ~3:00 → mid-right top
-        ~4:30 → mid-right bot
-        ~6:00 → bottom (skip — use for center)
-        ~7:30 → mid-left bot
-        ~9:00 → mid-left top
-        ~10:30→ top-left
+    <div class="eyebrow">NEXUS · 2026 · IT DEPARTMENT</div>
+    <div class="side-title">Progress Project<br>Nexus 2026</div>
+    <div class="side-sub">Ringkasan status digital transformation program — delapan modul inti, dari akuisisi data pabrik hingga portal analitik bisnis.</div>
 
-      Adjusted for rectangular slide (wider than tall):
-        TOP-LEFT      left=58,   top=46
-        TOP-RIGHT     left=1036, top=46
-        MID-LEFT-TOP  left=22,   top=228
-        MID-LEFT-BOT  left=22,   top=406
-        MID-RIGHT-TOP left=1072, top=228
-        MID-RIGHT-BOT left=1072, top=406
-        BOT-LEFT      left=200,  top=540
-        BOT-RIGHT     left=880,  top=540
-
-      Center: cx=640, cy=324, r=76
-      Center top-left: left=564, top=248
-    -->
-
-    <!-- N1: Plant Vision 360 — TOP LEFT -->
-    <div class="node" id="n1" style="left:58px;top:46px" onclick="openPop('n1')">
-      <div class="nhdr">
-        <div class="nicon ic-teal">🏭</div>
-        <div class="ntop">
-          <div class="nlabel lb-teal">Module 1</div>
-          <div class="ntitle">Plant Vision 360</div>
-        </div>
+    <div class="ring-wrap">
+      <div class="ring">
+        <div class="ring-num"><b>8</b><span>Modules</span></div>
       </div>
-      <div class="ndesc">Data akuisisi infrastruktur pabrik: reaktor suhu &amp; berat, sensor produksi, meter listrik.</div>
+      <div class="legend">
+        <div class="lg-row"><span class="lg-dot" style="background:var(--live)"></span>Live / Partial Live<span class="lg-n">03</span></div>
+        <div class="lg-row"><span class="lg-dot" style="background:var(--prog)"></span>In Progress / UAT<span class="lg-n">02</span></div>
+        <div class="lg-row"><span class="lg-dot" style="background:var(--dev)"></span>In Development<span class="lg-n">02</span></div>
+        <div class="lg-row"><span class="lg-dot" style="background:var(--disc)"></span>Early Discussion<span class="lg-n">01</span></div>
+      </div>
     </div>
 
-    <!-- N2: WMS & App Driver — MID LEFT TOP -->
-    <div class="node" id="n2" style="left:22px;top:240px" onclick="openPop('n2')">
-      <div class="nhdr">
-        <div class="nicon ic-violet">📦</div>
-        <div class="ntop">
-          <div class="nlabel lb-violet">Module 2</div>
-          <div class="ntitle">WMS &amp; App Driver</div>
-        </div>
+    <div class="side-div"></div>
+    <div class="side-note-h">Cara Membaca</div>
+    <div class="side-note">Klik salah satu modul di sebelah kanan untuk membuka detail progress, kebutuhan infrastruktur, dan target penyelesaian.</div>
+
+    <div class="side-foot">
+      <div class="side-foot-r" id="dateFoot"></div>
+    </div>
+  </div>
+
+  <!-- ============ MAIN ============ -->
+  <div class="main">
+    <div class="mhdr">
+      <div class="mhdr-l">
+        <div class="t1">Modul Program</div>
+        <div class="t2">Status per masing-masing inisiatif — klik untuk detail</div>
       </div>
-      <div class="ndesc">Pencatatan produksi, aktivitas gudang, dan finalisasi pengiriman ke customer.</div>
+      <div class="mhdr-r" id="dateHdr"></div>
     </div>
 
-    <!-- N3: Order Management — MID LEFT BOT -->
-    <div class="node" id="n3" style="left:58px;top=434px" onclick="openPop('n3')">
-      <div class="nhdr">
-        <div class="nicon ic-amber">🗂️</div>
-        <div class="ntop">
-          <div class="nlabel lb-amber">Module 3</div>
-          <div class="ntitle">Order Management</div>
-        </div>
-      </div>
-      <div class="ndesc">Pengaturan order cabang ke Plant — supply chain &amp; OTIF terjaga.</div>
-    </div>
+    <div class="rows" id="rows"></div>
 
-    <!-- N4: Customer Portal — TOP RIGHT -->
-    <div class="node" id="n4" style="left:1036px;top:46px" onclick="openPop('n4')">
-      <div class="nhdr">
-        <div class="nicon ic-rose">🌐</div>
-        <div class="ntop">
-          <div class="nlabel lb-rose">Module 4</div>
-          <div class="ntitle">Customer Portal</div>
-        </div>
-      </div>
-      <div class="ndesc">Platform monitoring pengiriman, piutang, pembayaran &amp; ticketing komplain.</div>
-    </div>
-
-    <!-- N5: CMMS — MID RIGHT TOP -->
-    <div class="node" id="n5" style="left:1072px;top:240px" onclick="openPop('n5')">
-      <div class="nhdr">
-        <div class="nicon ic-grn">🔧</div>
-        <div class="ntop">
-          <div class="nlabel lb-grn">Module 5</div>
-          <div class="ntitle">CMMS</div>
-        </div>
-      </div>
-      <div class="ndesc">Maintenance management: tiket perbaikan, preventive maintenance &amp; sparepart.</div>
-    </div>
-
-    <!-- N6: Nexus Portal Dashboard — MID RIGHT BOT -->
-    <div class="node" id="n6" style="left:1036px;top:434px" onclick="openPop('n6')">
-      <div class="nhdr">
-        <div class="nicon ic-blue">📈</div>
-        <div class="ntop">
-          <div class="nlabel lb-blue">Module 6</div>
-          <div class="ntitle">Nexus Portal Dashboard</div>
-        </div>
-      </div>
-      <div class="ndesc">Portal analitik bisnis: Sales, Finance, Product, Customer &amp; Warehouse Analysis.</div>
-    </div>
-
-    <!-- N7: Nexus One Internal Request & Approval — BOT LEFT -->
-    <div class="node" id="n7" style="left:178px;top:530px" onclick="openPop('n7')">
-      <div class="nhdr">
-        <div class="nicon ic-sky">📋</div>
-        <div class="ntop">
-          <div class="nlabel lb-sky">Module 7</div>
-          <div class="ntitle">Internal Request &amp; Approval</div>
-        </div>
-      </div>
-      <div class="ndesc">Digitalisasi pengajuan &amp; approval workflow dokumen internal perusahaan.</div>
-    </div>
-
-    <!-- N8: AutoPack Smart System — BOT RIGHT -->
-    <div class="node" id="n8" style="left:916px;top:530px" onclick="openPop('n8')">
-      <div class="nhdr">
-        <div class="nicon ic-orange">🤖</div>
-        <div class="ntop">
-          <div class="nlabel lb-orange">Module 8</div>
-          <div class="ntitle">AutoPack Smart System</div>
-        </div>
-      </div>
-      <div class="ndesc">Digitalisasi area produksi packing — pengembangan dari AI Hackathon.</div>
-    </div>
-
-    <!-- CENTER NODE -->
-    <div class="cn" id="cn" style="left:564px;top:248px">
-      <div class="cico">⬡</div>
-      <div class="ctit">Project<br>Nexus</div>
-      <div class="csub">IT Digital Transformation</div>
+    <div class="mftr">
+      <div>IT DEPARTMENT · CONFIDENTIAL · INTERNAL USE ONLY</div>
+      <div class="fr">PROJECT NEXUS 2026</div>
     </div>
 
     <!-- POPUP -->
@@ -268,7 +209,7 @@ html,body{width:100%;height:100%;background:#d4d4cf;display:flex;align-items:cen
             <div class="poplabel" id="poplabel"></div>
             <div class="poptitle" id="poptitle"></div>
           </div>
-          <button class="popclose" onclick="closePop()">×</button>
+          <button class="popclose" onclick="closePop()">&times;</button>
         </div>
         <div class="popbody">
           <div class="popdesc" id="popdesc"></div>
@@ -276,110 +217,92 @@ html,body{width:100%;height:100%;background:#d4d4cf;display:flex;align-items:cen
         </div>
       </div>
     </div>
-
   </div>
 
-  <div class="ftr">
-    <div class="ft">IT DEPARTMENT &nbsp;·&nbsp; CONFIDENTIAL &nbsp;·&nbsp; INTERNAL USE ONLY</div>
-    <div class="fr"><div class="ft">PROJECT NEXUS 2026</div></div>
-  </div>
 </div>
 
 <script>
-document.getElementById('ds').textContent = new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
+const dstr = new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
+document.getElementById('dateHdr').textContent = dstr;
+document.getElementById('dateFoot').textContent = 'UPDATED ' + dstr.toUpperCase();
 
-/* ── NODE DATA ── */
-const DATA = {
-  n1:{
-    icon:'🏭', icClass:'ic-teal', lblClass:'lb-teal',
-    label:'Module 1', title:'Plant Vision 360',
+/* ── MODULE DATA ── */
+const DATA = [
+  { id:'M-01', icon:'🏭', cat:'prog', title:'Plant Vision 360', sub:'Data akuisisi infrastruktur pabrik',
     desc:'Data akuisisi seluruh infrastruktur pendukung pabrik — mencatat data sensor secara real-time untuk mendukung visibilitas operasional.',
     dhead:'Progress Saat Ini',
-    rows:['Monitoring reaktor produksi PVAC aktif berjalan','Pengembangan lanjut: reaktor Neoprene','Berikutnya: integrasi data panel meter listrik','Data suhu & berat reaktor tercatat real-time'],
-    badge:'In Progress', badgeClass:'sb-teal', note:''
-  },
-  n2:{
-    icon:'📦', icClass:'ic-violet', lblClass:'lb-violet',
-    label:'Module 2', title:'WMS & App Driver',
+    rows:['Data akuisisi mesin produksi PVAC aktif berjalan','Data akuisisi mesin produksi NEOP aktif berjalan','Berikutnya: integrasi data panel meter listrik'],
+    badge:'In Progress', note:'' },
+  { id:'M-02', icon:'📦', cat:'prog', title:'WMS & App Driver', sub:'Produksi, gudang & finalisasi pengiriman',
     desc:'Pencatatan digital aktivitas mulai dari perencanaan produksi, proses produksi, aktivitas gudang, hingga finalisasi pengiriman ke customer.',
     dhead:'Progress & Kebutuhan Infrastruktur',
-    rows:['UAT aktivitas Gudang & Apps Driver sedang berjalan','Go Live Plant Surabaya: 03 Agustus 2026','8 tablet barcode scanner industrial grade untuk produksi','5 HP barcode scan untuk aktivitas gudang','18 unit HP (ex Sales) untuk mendukung driver'],
-    badge:'UAT Phase', badgeClass:'sb-violet', note:''
-  },
-  n3:{
-    icon:'🗂️', icClass:'ic-amber', lblClass:'lb-amber',
-    label:'Module 3', title:'Order Management',
+    rows:['UAT aktivitas Gudang & Apps Driver sedang berjalan','Go Live Plant Surabaya: 28 September 2026','8 tablet barcode scanner industrial grade untuk produksi','5 HP barcode scan untuk aktivitas gudang','18 unit HP (ex Sales) untuk mendukung driver'],
+    badge:'UAT Phase', note:'' },
+  { id:'M-03', icon:'🗂️', cat:'live', title:'Order Management', sub:'Order cabang ke Plant — supply chain & OTIF',
     desc:'Sistem pengaturan order dari cabang ke Plant agar informasi supply chain & OTIF dapat terjaga — mengatasi bias akibat input langsung ke AX tanpa memperhatikan batasan pengiriman.',
     dhead:'Status Implementasi',
     rows:['Sudah implementasi di semua cabang','Beberapa cabang masih belum aktif membuat OM saat pesan ke Plant','Kuota ekspedisi & lead time kini terkontrol lewat sistem'],
-    badge:'Live – Partial Active', badgeClass:'sb-amber', note:''
-  },
-  n4:{
-    icon:'🌐', icClass:'ic-rose', lblClass:'lb-rose',
-    label:'Module 4', title:'Customer Portal',
+    badge:'Live – Partial Active', note:'' },
+  { id:'M-04', icon:'🌐', cat:'dev', title:'Customer Portal', sub:'Monitoring pengiriman, piutang & komplain',
     desc:'Platform bagi customer untuk melihat history transaksi: monitoring pengiriman, piutang, pembayaran, serta modul ticketing komplain.',
     dhead:'Progress & Target',
-    rows:['Perbaikan tampilan & modul informasi payment','Modul ticketing komplain sudah tersedia','Target: Minggu 2 Juli 2026','Mulai dari 10 sampling customer industri'],
-    badge:'In Development', badgeClass:'sb-rose', note:''
-  },
-  n5:{
-    icon:'🔧', icClass:'ic-grn', lblClass:'lb-grn',
-    label:'Module 5', title:'CMMS',
+    rows:['Perbaikan tampilan & modul informasi payment','Modul ticketing komplain sudah tersedia','Target: Minggu 2 Agustus 2026','Mulai dari 10 sampling customer industri'],
+    badge:'In Development', note:'' },
+  { id:'M-05', icon:'🔧', cat:'disc', title:'CMMS', sub:'Maintenance management & sparepart',
     desc:'Computerized Maintenance Management System — manajemen maintenance mulai dari tiket perbaikan, preventive maintenance, project tracking, hingga sparepart management.',
     dhead:'Status Diskusi',
-    rows:['Diskusi awal dengan Pak Tomi & Pak Usman','Penyusunan scope of work & blueprint sedang berlangsung','Cakupan: tiket perbaikan, preventive, project, sparepart'],
-    badge:'Early Discussion', badgeClass:'sb-grn', note:''
-  },
-  n6:{
-    icon:'📈', icClass:'ic-blue', lblClass:'lb-blue',
-    label:'Module 6', title:'Nexus Portal Dashboard',
+    rows:['Pengembangan dari AI Hackathon','Penyusunan scope of work & blueprint sedang berlangsung','Cakupan: tiket perbaikan, preventive, project, sparepart'],
+    badge:'Early Discussion', note:'' },
+  { id:'M-06', icon:'📈', cat:'live', title:'Nexus Portal Dashboard', sub:'Portal analitik bisnis terintegrasi',
     desc:'Portal analitik bisnis terintegrasi yang menampilkan laporan dan insight dari seluruh lini operasional perusahaan.',
     dhead:'Cakupan Analitik',
     rows:['Sales Analytics — tren penjualan & performa cabang','Finance — laporan keuangan & arus kas','Product — performa produk & margin','Customer — analisis pelanggan & OTIF','Warehouse Analysis — efisiensi gudang & stok'],
-    badge:'nexus.mikatasa.com', badgeClass:'sb-blue',
-    note:'Portal ini merupakan langkah awal sebelum pengembangan ke Nexus AI Analytics Portal — platform berbasis kecerdasan buatan untuk analisis prediktif & prescriptive.'
-  },
-  n7:{
-    icon:'📋', icClass:'ic-sky', lblClass:'lb-sky',
-    label:'Module 7', title:'Nexus One — Internal Request & Approval',
+    badge:'nexus.mikatasa.com',
+    note:'Portal ini merupakan langkah awal sebelum pengembangan ke Nexus AI Analytics Portal — platform berbasis kecerdasan buatan untuk analisis prediktif & prescriptive.' },
+  { id:'M-07', icon:'📋', cat:'live', title:'Internal Request & Approval', sub:'Digitalisasi pengajuan & approval workflow',
     desc:'Digitalisasi proses pengajuan (request) dan approval workflow untuk berbagai dokumen internal perusahaan, menggantikan proses manual dan mengurangi lead time persetujuan.',
     dhead:'Dokumen yang Didukung',
     rows:['Pengajuan limit kredit customer','Pengajuan kas keluar','Pengajuan pembelian barang','(Roadmap) dokumen internal lainnya'],
-    badge:'Limit Kredit: Live – Surabaya', badgeClass:'sb-sky',
-    note:'Pengajuan limit kredit sudah ready dan telah diimplementasi di Surabaya. Rollout ke seluruh cabang akan segera dilanjutkan.'
-  },
-  n8:{
-    icon:'🤖', icClass:'ic-orange', lblClass:'lb-orange',
-    label:'Module 8', title:'AutoPack Smart System',
+    badge:'Limit Kredit: Live – Surabaya',
+    note:'Pengajuan limit kredit sudah ready dan telah diimplementasi di Surabaya. Rollout ke seluruh cabang akan segera dilanjutkan.' },
+  { id:'M-08', icon:'🤖', cat:'dev', title:'AutoPack Smart System', sub:'Digitalisasi & otomasi area packing',
     desc:'Digitalisasi dan otomasi area produksi packing menggunakan pendekatan teknologi cerdas untuk meningkatkan efisiensi, akurasi, dan visibilitas proses packing.',
     dhead:'Informasi Proyek',
     rows:['Pengembangan dari hasil AI Hackathon internal','Fokus: digitalisasi & otomasi area packing produksi','Meningkatkan efisiensi, akurasi, dan traceability','Integrasi dengan data produksi Plant Vision 360'],
-    badge:'In Development', badgeClass:'sb-orange', note:''
-  },
-};
+    badge:'In Development', note:'' },
+];
 
-function openPop(id){
-  const d = DATA[id];
-  if(!d) return;
+const rowsEl = document.getElementById('rows');
+rowsEl.innerHTML = DATA.map((d,i)=>`
+  <div class="row" onclick="openPop(${i})">
+    <div class="row-id">${d.id}</div>
+    <div class="row-icon ic-${d.cat}">${d.icon}</div>
+    <div class="row-txt">
+      <div class="rt1">${d.title}</div>
+      <div class="rt2">${d.sub}</div>
+    </div>
+    <div class="pill pl-${d.cat}">${d.badge}</div>
+    <div class="row-arrow">&#8250;</div>
+  </div>
+`).join('');
 
+function openPop(i){
+  const d = DATA[i];
   const popico = document.getElementById('popico');
-  popico.className = 'popico ' + d.icClass;
+  popico.className = 'popico';
   popico.textContent = d.icon;
 
-  const poplabel = document.getElementById('poplabel');
-  poplabel.className = 'poplabel ' + d.lblClass;
-  poplabel.textContent = d.label;
-
+  document.getElementById('poplabel').textContent = d.id + ' · MODULE';
   document.getElementById('poptitle').textContent = d.title;
   document.getElementById('popdesc').textContent  = d.desc;
 
   const rows = d.rows.map(r=>`<div class="pdr">${r}</div>`).join('');
-  const note = d.note ? `<div class="pnote">💡 ${d.note}</div>` : '';
+  const note = d.note ? `<div class="pnote">${d.note}</div>` : '';
   document.getElementById('popdetail').innerHTML = `
     <div class="popdetail-box">
       <div class="pdh">${d.dhead}</div>
       ${rows}
-      <span class="pbadge ${d.badgeClass}">${d.badge}</span>
+      <span class="pbadge pl-${d.cat}">${d.badge}</span>
       ${note}
     </div>`;
 
@@ -388,56 +311,6 @@ function openPop(id){
 function closePop(){ document.getElementById('popov').classList.remove('show'); }
 function overlayClose(e){ if(e.target.id==='popov') closePop(); }
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closePop(); });
-
-/* ── CONNECTOR LINES ── */
-/*
-  Center circle: cx=640, cy=324, r=76
-  Attach sides per node:
-    n1 top-left      → right edge of node
-    n2 mid-left-top  → right edge
-    n3 mid-left-bot  → right edge
-    n4 top-right     → left edge
-    n5 mid-right-top → left edge
-    n6 mid-right-bot → left edge
-    n7 bot-left      → top edge
-    n8 bot-right     → top edge
-*/
-const CX=640, CY=324, R=76;
-const SIDES={n1:'right',n2:'right',n3:'right',n4:'left',n5:'left',n6:'left',n7:'top',n8:'top'};
-
-function attach(id,side){
-  const canvas=document.getElementById('canvas');
-  const cr=canvas.getBoundingClientRect();
-  const nr=document.getElementById(id).getBoundingClientRect();
-  const x=nr.left-cr.left, y=nr.top-cr.top, w=nr.width, h=nr.height;
-  if(side==='right')  return [x+w,   y+h/2];
-  if(side==='left')   return [x,     y+h/2];
-  if(side==='top')    return [x+w/2, y];
-  return [x+w/2, y+h];
-}
-
-function drawLines(){
-  const svg=document.getElementById('csvg');
-  svg.querySelectorAll('.cl').forEach(e=>e.remove());
-  Object.entries(SIDES).forEach(([id,side])=>{
-    const [nx,ny]=attach(id,side);
-    const dx=CX-nx, dy=CY-ny, d=Math.sqrt(dx*dx+dy*dy);
-    const tx=CX-(dx/d)*R, ty=CY-(dy/d)*R;
-    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
-    line.setAttribute('class','cl');
-    line.setAttribute('x1',nx.toFixed(1)); line.setAttribute('y1',ny.toFixed(1));
-    line.setAttribute('x2',tx.toFixed(1)); line.setAttribute('y2',ty.toFixed(1));
-    line.setAttribute('stroke','#b8b8b2');
-    line.setAttribute('stroke-width','1.2');
-    line.setAttribute('marker-end','url(#arr)');
-    svg.appendChild(line);
-  });
-}
-
-/* Fix n3 top which had a typo — set via JS */
-document.getElementById('n3').style.top = '434px';
-
-window.addEventListener('load', drawLines);
 </script>
 </body>
 </html>
